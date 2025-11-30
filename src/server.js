@@ -39,7 +39,7 @@ const corsOptions = { origin: clientOrigin };
 app.use(cors(corsOptions));
 
 // the routes
-app.get('/home', (req, res) => res.render('home'));
+app.get('/', (req, res) => res.render('home'));
 app.use('/login', loginRouter);
 app.use('/register', registerRoute);
 app.use('/logout', logoutRouter);
@@ -79,7 +79,7 @@ app.get(
 );
 
 app.get('/oops', (req, res) => res.render('errors/oops'));
-app.get('/health', (req, res) => res.status(200).send('OK'));
+
 app.use((req, res) => res.status(404).render('errors/404'));
 
 // Connect to MongoDB with error handling
