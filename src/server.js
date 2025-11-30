@@ -11,6 +11,7 @@ import logoutRouter from './routes/logout.route.js';
 import refreshRouter from './routes/refresh.route.js';
 import forgetRouter from './routes/forget-password.route.js';
 import resetRouter from './routes/reset-password.route.js';
+import googleRouter from './routes/google-auth.route.js';
 import Users from './models/mongo.js';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
@@ -33,13 +34,14 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(passport.initialize());
 
 // the routes
-app.get('/home', (res) => res.render('home'));
+app.get('/home', (req, res) => res.render('home'));
 app.use('/login', loginRouter);
 app.use('/register', registerRoute);
 app.use('/logout', logoutRouter);
 app.use('/refresh', refreshRouter);
 app.use('/forget-password', forgetRouter);
 app.use('/reset-password', resetRouter);
+app.use('/', googleRouter);
 
 app.get(
   '/dashboard',

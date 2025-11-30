@@ -27,6 +27,7 @@ This project serves as a comprehensive playground for learning and implementing 
 
 - **Local Strategy**: Traditional email/password login.
 - **JWT Strategy**: Secure, stateless route protection using JSON Web Tokens.
+- **Google OAuth**: Social login integration with account linking support.
 
 ### 2. Advanced Token Management
 
@@ -70,6 +71,9 @@ src/
     JWT_SECRET_KEY=your_access_token_secret
     JWT_REFRESH_SECRET=your_refresh_token_secret
     PORT=3000
+    GOOGLE_CLIENT_ID=your_google_client_id
+    GOOGLE_CLIENT_SECRET=your_google_client_secret
+    GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
     ```
 3.  **Run the App**:
     ```bash
