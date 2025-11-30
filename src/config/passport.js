@@ -68,7 +68,7 @@ passport.use(jwt);
 const credentials = {
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: 'https://localhost:3000/auth/google/callback',
+  callbackURL: 'https://passportjs-auth.vercel.app/auth/google/callback',
 };
 
 const googleAuthentication = async (
