@@ -74,6 +74,7 @@ app.get(
 );
 
 app.get('/oops', (req, res) => res.render('errors/oops'));
+app.get('/health', (req, res) => res.status(200).send('OK'));
 app.use((req, res) => res.status(404).render('errors/404'));
 
 // Connect to MongoDB with error handling
@@ -95,8 +96,7 @@ if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
     serverSSl.listen(PORT, () => {
       console.log(`Server is running on ${PORT}`);
     });
-  }
-  catch (err) {
+  } catch (err) {
     console.log(err);
   }
 }
