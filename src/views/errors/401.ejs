@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>401 - Unauthorized</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://cdn-icons-png.flaticon.com/512/61/61457.png"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body
@@ -36,12 +41,10 @@
 
           if (res.ok) {
             window.location.reload();
-          }
-          else {
+          } else {
             window.location.href = '/login?error=Session Expired';
           }
-        }
-        catch (err) {
+        } catch (err) {
           window.location.href = '/oops';
         }
       })();

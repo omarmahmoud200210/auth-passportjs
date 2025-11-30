@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://cdn-icons-png.flaticon.com/512/61/61457.png"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body
@@ -20,12 +25,12 @@
         >!
       </h1>
       <% if (role === 'admin') { %>
-        <p class="text-xl text-green-300 mb-2"><%= user %>, You're the admin</p>
+      <p class="text-xl text-green-300 mb-2"><%= user %>, You're the admin</p>
       <% } %>
       <p class="text-xl text-gray-300 mb-8">
         You have successfully logged in. This is your personal dashboard.
       </p>
-      <a 
+      <a
         href="/logout"
         class="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white font-bold py-3 px-6 rounded-full focus:outline-none focus:shadow-outline transition duration-300"
       >
