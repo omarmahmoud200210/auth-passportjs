@@ -76,21 +76,29 @@ app.get(
 app.get('/oops', (req, res) => res.render('errors/oops'));
 app.use((req, res) => res.status(404).render('errors/404'));
 
-// Connect to MongoDB
-connectWithMongo(process.env.MONGO_URL);
+// Connect to MongoDB with error handling
+connectWithMongo(process.env.MONGO_URL)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
-if (process.env.NODE_ENV !== 'production') {
-  const serverSSl = https.createServer(
-    {
-      key: fs.readFileSync(path.join(__dirname, 'certs', 'key.pem')),
-      cert: fs.readFileSync(path.join(__dirname, 'certs', 'cert.pem')),
-    },
-    app
-  );
+// Only run HTTPS server if NOT on Vercel and NOT in production
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  try {
+    const serverSSl = https.createServer(
+      {
+        key: fs.readFileSync(path.join(__dirname, 'certs', 'key.pem')),
+        cert: fs.readFileSync(path.join(__dirname, 'certs', 'cert.pem')),
+      },
+      app
+    );
 
-  serverSSl.listen(PORT, () => {
-    console.log(`Server is running on ${PORT}`);
-  });
+    serverSSl.listen(PORT, () => {
+      console.log(`Server is running on ${PORT}`);
+    });
+  }
+  catch (err) {
+    console.log(err);
+  }
 }
 
 export default app;
