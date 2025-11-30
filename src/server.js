@@ -14,6 +14,7 @@ import resetRouter from './routes/reset-password.route.js';
 import googleRouter from './routes/google-auth.route.js';
 import Users from './models/mongo.js';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 dotenv.config();
 
@@ -32,6 +33,10 @@ app.set('views', path.join(__dirname, 'views'));
 
 // initialize passport
 app.use(passport.initialize());
+
+const clientOrigin = (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://localhost:3000");
+const corsOptions = { origin: clientOrigin };
+app.use(cors(corsOptions));
 
 // the routes
 app.get('/home', (req, res) => res.render('home'));
@@ -89,9 +94,7 @@ if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
       {
         key: fs.readFileSync(path.join(__dirname, 'certs', 'key.pem')),
         cert: fs.readFileSync(path.join(__dirname, 'certs', 'cert.pem')),
-      },
-      app
-    );
+      }, app);
 
     serverSSl.listen(PORT, () => {
       console.log(`Server is running on ${PORT}`);
