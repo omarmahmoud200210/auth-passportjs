@@ -46,20 +46,26 @@ app.use('/', googleRouter);
 app.get(
   '/dashboard',
   (req, res, next) => {
-    passport.authenticate('jwt', { session: false }, async (err, user, info) => {
-      if (err) return next(err);
-      if (!user) res.status(401).render('errors/401');
-      
-      const adminUser = await Users.findOne({ email: 'omar.mahmoud200210@gmail.com' });
-      
-      if (adminUser) {
-        adminUser.role = 'admin';
-        await adminUser.save();
+    passport.authenticate(
+      'jwt',
+      { session: false },
+      async (err, user, info) => {
+        if (err) return next(err);
+        if (!user) res.status(401).render('errors/401');
+
+        const adminUser = await Users.findOne({
+          email: 'omar.mahmoud200210@gmail.com',
+        });
+
+        if (adminUser) {
+          adminUser.role = 'admin';
+          await adminUser.save();
+        }
+
+        req.user = user;
+        return next();
       }
-      
-      req.user = user;
-      return next();
-    })(req, res, next);
+    )(req, res, next);
   },
   (req, res) => {
     const username = req.user.username.toUpperCase() || 'User';
@@ -70,15 +76,21 @@ app.get(
 app.get('/oops', (req, res) => res.render('errors/oops'));
 app.use((req, res) => res.status(404).render('errors/404'));
 
-const serverSSl = https.createServer(
-  {
-    key: fs.readFileSync(path.join(__dirname, 'certs', 'key.pem')),
-    cert: fs.readFileSync(path.join(__dirname, 'certs', 'cert.pem')),
-  },
-  app
-);
+// Connect to MongoDB
+connectWithMongo(process.env.MONGO_URL);
 
-serverSSl.listen(PORT, async () => {
-  await connectWithMongo(process.env.MONGO_URL);
-  console.log(`Server is running on ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  const serverSSl = https.createServer(
+    {
+      key: fs.readFileSync(path.join(__dirname, 'certs', 'key.pem')),
+      cert: fs.readFileSync(path.join(__dirname, 'certs', 'cert.pem')),
+    },
+    app
+  );
+
+  serverSSl.listen(PORT, () => {
+    console.log(`Server is running on ${PORT}`);
+  });
+}
+
+export default app;
