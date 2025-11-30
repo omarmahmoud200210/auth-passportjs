@@ -22,26 +22,30 @@ const handleResetPassword = async (req, res) => {
   }
 
   try {
-      const validRefreshToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
-      const { newPassword, confirmPassword } = req.body;
-      const hashedPssword = await hashPassword(newPassword);
+    const validRefreshToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const { newPassword, confirmPassword } = req.body;
+    const hashedPssword = await hashPassword(newPassword);
+
+    if (newPassword !== confirmPassword) {
+      return res.render('reset-password', {
+        token,
+        error: 'Passwords does not match',
+      });
+    } else {
+      user.password = hashedPssword;
+      user.resetToken = null;
+      await user.save();
       
-      if (newPassword !== confirmPassword) {
-        return res.render('reset-password', {
-          token,
-          error: 'Passwords do not match',
-        });
-      }
-      else {
-        user.password = hashedPssword;
-        user.resetToken = null;
-        await user.save();
-        res.redirect('/login');
-      }
+      res.clearCookie('resetToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+      });
+      
+      res.redirect('/login');
     }
-    catch (err) {
-        return res.render('expired');
-    }
+  } catch (err) {
+    return res.render('expired');
+  }
 };
 
 export { renderResetPasswordPage, handleResetPassword };
