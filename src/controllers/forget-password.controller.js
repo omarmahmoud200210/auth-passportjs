@@ -12,6 +12,10 @@ const handelForgetPassword = async (req, res) => {
   if (!user) {
     return res.status(404).render('errors/404');
   }
+
+  else if (user.password === "") {
+    return res.status(400).render('errors/400');
+  }
     
   else {
       const payload = {
